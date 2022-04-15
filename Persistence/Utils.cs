@@ -8,7 +8,7 @@ namespace Persistence
 {
     internal class Utils
     {
-        public static string FindFile(string path, string pattern)
+        public static string FindFile(string pattern, string path = @"C:\Program Files\")
         {
             DirectoryInfo dirInfo = new(path);
             var dirs = dirInfo.GetDirectories().OrderBy(x => x.Name);
@@ -24,7 +24,7 @@ namespace Persistence
 
                 if (files.Length != 0)
                 {
-                    return $"{dir.FullName}\\{pattern}";
+                    return $"{files.First()}";
                 }
             }
 
