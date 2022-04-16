@@ -69,5 +69,21 @@ namespace Persistence
 
             // subkey.DeleteValue("Debugger");
         }
+
+
+        /// <summary>
+        /// Execution of commands when a some program from Office pack opens
+        /// </summary>
+        /// <param name="pathToDll">A dll file that should be executed</param>
+        public void ExecCommandOnOfficeOpening(string pathToDll)
+        {
+            registryKey = Registry.CurrentUser;
+            registryKey.CreateSubKey(@$"Software\Microsoft\Office test\Special\Perf", true);
+            var subKey = registryKey.OpenSubKey(@$"Software\Microsoft\Office test\Special\Perf", true);
+            ArgumentNullException.ThrowIfNull(subKey);
+
+            // Set Default Value
+            subKey.SetValue("", pathToDll, RegistryValueKind.String);
+        }
     }
 }
