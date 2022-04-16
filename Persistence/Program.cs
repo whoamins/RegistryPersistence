@@ -7,8 +7,8 @@ namespace Persistence
     {
         static void Main(string[] args)
         {
-            //Persistence persistence = new();
-            //persistence.ReplaceProgram();
+            Persistence persistence = new();
+            persistence.ExecProgAndCommand("Acrobat.exe", "calc.exe");
         }
     }
 }

