@@ -87,6 +87,10 @@ namespace Persistence
             subKey.SetValue("", pathToDll, RegistryValueKind.String);
         }
 
+        /// <summary>
+        /// Exec exe on startup
+        /// </summary>
+        /// <param name="pathToExe">An exe file that should be executed</param>
         public void ExecOnStartup(string pathToExe)
         {
             registryKey = Registry.CurrentUser;
